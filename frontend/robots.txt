@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://vin-decoder-project.netlify.app/sitemap.xml
+
+# Allow all crawlers
+Disallow:
+
+# Crawl delay (optional)
+Crawl-delay: 1

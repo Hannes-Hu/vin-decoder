@@ -1,0 +1,22 @@
+[build]
+  command = "npm install"
+  publish = "."
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Netlify Functions configuration
+[functions]
+  directory = "."
+
+# Redirects for API routes
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/server/:splat"
+  status = 200
+
+# SPA fallback 
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 404

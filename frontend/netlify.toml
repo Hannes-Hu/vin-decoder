@@ -1,0 +1,129 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Redirect API calls to your backend 
+[[redirects]]
+  from = "/api/*"
+  to = "https://vin-decoder-backend.netlify.app/api/:splat"
+  status = 200
+  force = true
+
+# SPA fallback 
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Redirect for common typos and legacy URLs
+[[redirects]]
+  from = "/vin-decoder"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/vehicle-history"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/check-vin"
+  to = "/"
+  status = 301
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Security headers
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    
+    # Performance headers
+    Cache-Control = "public, max-age=3600"
+
+# Specific headers for important files
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Content-Type = "application/xml"
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Content-Type = "text/plain"
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/favicon.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# Cache static assets aggressively for performance
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+    Content-Type = "application/javascript"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+    Content-Type = "text/css"
+
+[[headers]]
+  for = "/*.woff2"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+    Content-Type = "font/woff2"
+
+# HTML files should not be cached for long
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Image optimization
+[[headers]]
+  for = "/*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# Error page redirects
+[[redirects]]
+  from = "/404"
+  to = "/404.html"
+  status = 404
+
+# Preview settings for deploy previews
+[context.deploy-preview.environment]
+  VITE_API_URL = "https://deploy-preview-backend.netlify.app"
+
+[context.branch-deploy.environment]
+  VITE_API_URL = "https://staging-backend.netlify.app"
+
+[context.production.environment]
+  VITE_API_URL = "https://vin-decoder-backend.netlify.app"
